@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Web3 from 'web3';
 import SmartWalletABI from './abi/SmartWallet.json'; // Import Smart Wallet contract ABI
 
-const smartWalletAddress = "0x24B3c7704709ed1491473F30393FFc93cFB0FC34"; // Replace with your Smart Wallet contract's address
+const smartWalletAddress = "0xe73bc5BD4763A3307AB5F8F126634b7E12E3dA9b"; // Replace with your Smart Wallet contract's address
 
 const WalletDisplay = () => {
     const [address, setAddress] = useState('');

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Web3 from 'web3';
 import SmartWalletDeployer from './abi/SmartWalletDeployer.json'; 
 
-const smartWalletDeployerAddress = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1"; 
+const smartWalletDeployerAddress = "0x09635F643e140090A9A8Dcd712eD6285858ceBef"; 
 
 const CreateWallet = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(false);

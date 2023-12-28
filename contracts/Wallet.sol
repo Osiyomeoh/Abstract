@@ -33,27 +33,10 @@ contract SmartWallet {
         _;
     }
 
-    function _validateAndUpdateNonce(UserOperation memory userOp) internal {
-        require(_nonce++ == userOp.nonce, "Account: Invalid nonce");
-    }
-
-    function _validateSignature(UserOperation calldata userOp, bytes32 userOpHash) internal view returns (uint256 deadline) {
-        require(userOp.signature.length == 65, "Invalid signature length");
-
-        bytes32 prefixedHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", userOpHash));
-        address recovered = ecrecover(prefixedHash, uint8(userOp.signature[0]), bytes32(userOp.signature[1:33]), bytes32(userOp.signature[33:65]));
-
-        require(recovered == owner, "Account: Wrong signature");
-        return 0;
-    }
+   
 
     function exec(UserOperation calldata userOp) external {
-        
-        _validateAndUpdateNonce(userOp);
-        bytes32 userOpHash = keccak256(abi.encode(userOp));
-        _validateSignature(userOp, userOpHash);
 
-        
         (bool success, ) = address(this).call(userOp.callData);
         require(success, "Call execution failed");
     }
@@ -70,6 +53,16 @@ contract SmartWallet {
         emit DepositReceived(msg.sender, amount);
     }
 
+    function sendEther(address payable sender, address payable to, uint256 amount) public {
+        require(address(this).balance >= amount, "Insufficient balance");
+        
+        sender.transfer(amount); // Deduct the amount from the sender's balance
+        
+        // Transfer the deducted amount to the recipient
+        (bool success, ) = to.call{value: amount}("");
+        require(success, "Transfer failed");
+        emit TransactionProcessed(sender, to, amount, "");
+    }
     function sendEther(address payable to, uint256 amount) public {
         require(address(this).balance >= amount, "Insufficient balance");
         (bool success, ) = to.call{value: amount}("");
@@ -77,6 +70,9 @@ contract SmartWallet {
         emit TransactionProcessed(address(this), to, amount, "");
     }
 
+    
+    
+    
     
     function getBalance(address targetAddress) public view returns (uint256) {
         return address(targetAddress).balance;

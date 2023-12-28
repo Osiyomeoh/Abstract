@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import smartWalletABI from './abi/SmartWallet.json';
 
-const smartWalletAddress = "0x24B3c7704709ed1491473F30393FFc93cFB0FC34";
+const smartWalletAddress = "0xe73bc5BD4763A3307AB5F8F126634b7E12E3dA9b";
 
 const SendFunds = () => {
     const [recipient, setRecipient] = useState('');
     const [amount, setAmount] = useState('');
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
+    const [sender, setSender] = useState('');
     const [isWalletConnected, setIsWalletConnected] = useState(false);
 
     useEffect(() => {
@@ -47,8 +48,9 @@ const SendFunds = () => {
     
            
             const recipientAddressHex = web3.utils.toChecksumAddress(recipient);
+            const senderAddressHex = web3.utils.toChecksumAddress(sender);
     
-            await contract.methods.sendEther(recipientAddressHex, amountInWei)
+            await contract.methods.sendEther(senderAddressHex, recipientAddressHex, amountInWei)
                 .send({ from: accounts[0] });
     
             alert(`Sent ${amount} ETH to ${recipient}`);
@@ -79,6 +81,13 @@ const SendFunds = () => {
         <div>
             {isWalletConnected ? (
                 <div>
+                    <input
+                        type="text"
+                        value={sender}
+                        onChange={(e) => setSender(e.target.value)}
+                        placeholder="Sender Address"
+                        style={inputStyle}
+                    />
                     <input
                         type="text"
                         value={recipient}
