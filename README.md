@@ -102,7 +102,7 @@ The Smart Wallet App interacts with a Solidity smart contract deployed on the Et
 
 ### Smart Contract Address
 
-- Mainnet: `0xYourSmartWalletAddress`
+- Mainnet: `0xe73bc5BD4763A3307AB5F8F126634b7E12E3dA9b`
 
 ### Smart Contract Functions
 
